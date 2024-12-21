@@ -1,40 +1,41 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from .models import Products
+from .models import Product
 
 
 def home(request):
-    articles = Products.objects.all()
-    ctx = {'articles': articles}
-    return render(request, 'index.html', ctx)
+    return render(request, 'index.html')
 
 
-def create_products(request):
+def product_list(request):
+    products = Product.objects.all()
+    # products.delete()
+    ctx = {'products': products}
+    return render(request, 'products/product-list.html', ctx)
+
+
+def product_create(request):
     if request.method == 'POST':
-        product_lis = request.POST.get('product_lis')
-        product_detail = request.POST.get('product_detail')
-        product_create = request.POST.get('product_create')
-        about_page = request.POST.get('long_content')
-        if product_lis and product_detail and product_create and about_page:
-            Products.objects.create(
-                product_lis=product_lis,
-                product_detail=product_detail,
-                product_create=product_create,
-                about_page=about_page,
+        title = request.POST.get('title')
+        price = request.POST.get('price')
+        category = request.POST.get('category')
+        short_content = request.POST.get('short_content')
+        long_content = request.POST.get('long_content')
+        image = request.FILES.get('image')
+        # print(price, title, category, short_content, long_content, image)
+        if title and price and category and short_content and long_content and image:
+            Product.objects.create(
+                title=title,
+                price=price,
+                category=category,
+                short_content=short_content,
+                long_content=long_content,
+                image=image
             )
-            return redirect('home')
-    return render(request, 'products/add-post.html')
+            return redirect('products:list')
+    return render(request, 'products/product-create.html')
 
 
-def products_by_category(request, category, about_page=None):
-    articles = Products.objects.filter(about_page)
-    ctx = {'articles': articles,
-           'category': category}
-    return render(request, 'products/articles-by-category.html', ctx)
-
-
-def products_detail(request, pk):
-    products = get_object_or_404(Products, pk=pk)
-    ctx = {'articles': products}
-    return render(request, 'products/detail.html', ctx)
-
-
+def product_detail(request, pk):
+    product = get_object_or_404(Product, pk=pk)
+    ctx = {'product': product}
+    return render(request, 'products/product-detail.html', ctx)
