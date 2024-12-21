@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+{% block title %} Bosh Sahifa {% endblock %}
+
+{% block content %}
+    {% for article in articles %}
+    <div class="container mt-4 flex-grow-1">
+        <h1>Xush kelibsiz!</h1>
+        <p>Bu bizning onlayn do'konimizning bosh sahifasi.</p>
+        <a href="product-list.html" class="btn btn-primary">Mahsulotlarni Ko'rish</a>
+    </div>
+    {% empty %}
+        <h2>Hozircha yangilik yo'q</h2>
+    {% endfor %}
+{% endblock
+
+
+
+
